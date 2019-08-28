@@ -78,9 +78,9 @@
 	
 	var _Board = __webpack_require__(/*! ./Board.js */ 3);
 	
-	var _Player = __webpack_require__(/*! ./Player.js */ 5);
+	var _Player = __webpack_require__(/*! ./Player.js */ 6);
 	
-	var _Logic = __webpack_require__(/*! ./Logic.js */ 6);
+	var _Logic = __webpack_require__(/*! ./Logic.js */ 7);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -410,7 +410,7 @@
 	
 	var _Cell = __webpack_require__(/*! ./Cell.js */ 4);
 	
-	var _PieceAnimator = __webpack_require__(/*! ./PieceAnimator.js */ 7);
+	var _PieceAnimator = __webpack_require__(/*! ./PieceAnimator.js */ 5);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -714,6 +714,74 @@
 
 /***/ }),
 /* 5 */
+/*!*********************************!*\
+  !*** ./js/raw/PieceAnimator.js ***!
+  \*********************************/
+/***/ (function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var PieceAnimator = exports.PieceAnimator = function () {
+		function PieceAnimator(board, from, to, callback) {
+			_classCallCheck(this, PieceAnimator);
+	
+			this.callback = callback;
+			this.board = board;
+			this.element = document.createElement("div");
+			this.element.classList.add("piece-animator");
+			this.animate(from, to);
+		}
+	
+		_createClass(PieceAnimator, [{
+			key: "animate",
+			value: function animate(from, to) {
+				var piece = from.piece;
+				var fromTop = from.element.getBoundingClientRect().top + document.documentElement.scrollTop;
+				var fromLeft = from.element.getBoundingClientRect().left + document.documentElement.scrollLeft;
+				var toTop = to.element.getBoundingClientRect().top + document.documentElement.scrollTop;
+				var toLeft = to.element.getBoundingClientRect().left + document.documentElement.scrollLeft;
+				var background = piece.element.style.backgroundImage;
+				this.element.style.width = from.element.getBoundingClientRect().width + "px";
+				this.element.style.height = from.element.getBoundingClientRect().height + "px";
+				this.element.style.transform = "translate3D(" + fromLeft + "px, " + fromTop + "px, 0)";
+				this.element.style.backgroundImage = background;
+				document.body.append(this.element);
+	
+				var self = this;
+				setTimeout(function () {
+					self.to(toLeft, toTop);
+				}, 100);
+			}
+		}, {
+			key: "to",
+			value: function to(x, y) {
+				this.element.style.transform = "translate3D(" + x + "px, " + y + "px, 0)";
+				var self = this;
+				setTimeout(function () {
+					self.triggerCallback();
+				}, 500);
+			}
+		}, {
+			key: "triggerCallback",
+			value: function triggerCallback() {
+				document.body.removeChild(this.element);
+				this.callback();
+			}
+		}]);
+
+		return PieceAnimator;
+	}();
+
+/***/ }),
+/* 6 */
 /*!**************************!*\
   !*** ./js/raw/Player.js ***!
   \**************************/
@@ -737,7 +805,7 @@
 	};
 
 /***/ }),
-/* 6 */
+/* 7 */
 /*!*************************!*\
   !*** ./js/raw/Logic.js ***!
   \*************************/
@@ -925,74 +993,6 @@
 		}]);
 
 		return Rule;
-	}();
-
-/***/ }),
-/* 7 */
-/*!*********************************!*\
-  !*** ./js/raw/PieceAnimator.js ***!
-  \*********************************/
-/***/ (function(module, exports) {
-
-	"use strict";
-	
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	var PieceAnimator = exports.PieceAnimator = function () {
-		function PieceAnimator(board, from, to, callback) {
-			_classCallCheck(this, PieceAnimator);
-	
-			this.callback = callback;
-			this.board = board;
-			this.element = document.createElement("div");
-			this.element.classList.add("piece-animator");
-			this.animate(from, to);
-		}
-	
-		_createClass(PieceAnimator, [{
-			key: "animate",
-			value: function animate(from, to) {
-				var piece = from.piece;
-				var fromTop = from.element.getBoundingClientRect().top + document.documentElement.scrollTop;
-				var fromLeft = from.element.getBoundingClientRect().left + document.documentElement.scrollLeft;
-				var toTop = to.element.getBoundingClientRect().top + document.documentElement.scrollTop;
-				var toLeft = to.element.getBoundingClientRect().left + document.documentElement.scrollLeft;
-				var background = piece.element.style.backgroundImage;
-				this.element.style.width = from.element.getBoundingClientRect().width + "px";
-				this.element.style.height = from.element.getBoundingClientRect().height + "px";
-				this.element.style.transform = "translate3D(" + fromLeft + "px, " + fromTop + "px, 0)";
-				this.element.style.backgroundImage = background;
-				document.body.append(this.element);
-	
-				var self = this;
-				setTimeout(function () {
-					self.to(toLeft, toTop);
-				}, 100);
-			}
-		}, {
-			key: "to",
-			value: function to(x, y) {
-				this.element.style.transform = "translate3D(" + x + "px, " + y + "px, 0)";
-				var self = this;
-				setTimeout(function () {
-					self.triggerCallback();
-				}, 500);
-			}
-		}, {
-			key: "triggerCallback",
-			value: function triggerCallback() {
-				document.body.removeChild(this.element);
-				this.callback();
-			}
-		}]);
-
-		return PieceAnimator;
 	}();
 
 /***/ })

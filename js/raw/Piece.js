@@ -4,6 +4,7 @@ export class Piece {
 		this.artwork = config["artwork"];
 		this.logic = config["logic"];
 		this.color = config["color"];
+		this.round = 0;
 		this.orientation = config["orientation"];
 
 		this.element = document.createElement("div");

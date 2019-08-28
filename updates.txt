@@ -1,0 +1,12 @@
+// Logic updates
+
+mirroring {
+	logic: "(<v><h><d>)",
+	v: "vertical morroring",
+	h: "horizontal mirroring",
+	d: "diagonal mirroring",
+}
+
+transforming {
+	logic: "t[r<row>|c<column>],<piece>";
+}

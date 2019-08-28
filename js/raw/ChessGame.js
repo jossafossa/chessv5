@@ -135,12 +135,18 @@ export class ChessGame {
 			if (this.activePlayer.color == cell.piece.color) {
 				console.log("own player");
 				this.selectedCell = cell;
-				this.validFirstMoves = this.board.getValidFirstMoves(cell);
 				this.validMoves = this.board.getValidMoves(cell);
-				this.validCaptures = this.board.getValidCaptures(cell);
-
 				this.board.markCells(this.validMoves);
+
+				this.validCaptures = this.board.getValidCaptures(cell);
 				this.board.markCells(this.validCaptures);
+ 
+ 				if (cell.piece.round < 1) {
+					this.validFirstMoves = this.board.getValidFirstMoves(cell);
+					this.board.markCells(this.validFirstMoves);
+					console.log("first moves"); 					
+ 				}
+
 			}
 		} else {
 			if (this.validCaptures.includes(cell)) {
@@ -157,16 +163,24 @@ export class ChessGame {
 	}
 
 	selectCell(cell) {
-		console.log("click cell");
-		if (this.selectedCell && this.validMoves.includes(cell)) {
+		console.log(this.selectedCell, this.validFirstMoves.includes(cell), this.selectedCell.piece.round);
+
+		// first move
+		if (this.selectedCell && this.validFirstMoves.includes(cell) && this.selectedCell.piece.round < 1) {
+			this.selectedCell.piece.round++;
 			this.board.move(this.selectedCell, cell);
-			this.selectedCell = false;
 			this.switchPlayer();
-			this.board.unmarkCells();
-		} else {
-			this.selectedCell = false;
-			this.board.unmarkCells();
+		} 
+		// normal move
+		else if (this.selectedCell && this.validMoves.includes(cell)) {
+			this.selectedCell.piece.round++;
+			this.board.move(this.selectedCell, cell);
+			this.switchPlayer();
 		}
+
+
+		this.selectedCell = false;
+		this.board.unmarkCells();
 	}
 
 	// generatePieces() {
