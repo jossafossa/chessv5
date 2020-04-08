@@ -2,6 +2,8 @@ import {Piece} from "./Piece.js";
 import {Board} from "./Board.js";
 import {Player} from "./Player.js";
 import {Logic} from "./Logic.js";
+import {Scoreboard} from "./Scoreboard.js";
+
 
 function extend(){
   for(var i=1; i<arguments.length; i++)
@@ -51,7 +53,7 @@ export class ChessGame {
 				1: {
 					name: "pawn",
 					artwork: "img/pawn/",
-					logic: "fm0,1i2;m0,1;c1,1;c-1,1",
+					logic: "fm0,1i2;m0,1;c1,1;c-1,1;t0,1,0",
 				},
 				2: {
 					name: "bishop",
@@ -110,6 +112,7 @@ export class ChessGame {
 		// setup variables
 		this.boardElem = document.querySelectorAll(board)[0];
 		this.board = new Board({element: this.boardElem, size: this.size, colors: this.colors});
+		this.scoreboard = new Scoreboard(document.querySelector(".scoreboard"));
 		this.pieces = {};
 		this.players = [];
 		this.activePlayer;
@@ -208,12 +211,14 @@ export class ChessGame {
 			}) );
 		}
 		this.activePlayer = this.players[this.activePlayerIndex];
+		this.scoreboard.setPlayer(this.activePlayer.name);
 	}
 
 	switchPlayer() {
 		this.activePlayerIndex = (this.activePlayerIndex + 1) % this.players.length;
 		this.activePlayer = this.players[this.activePlayerIndex];
-		console.log(this.activePlayerIndex);
+		console.log(this.activePlayer);
+		this.scoreboard.setPlayer(this.activePlayer.name);
 	}
 
 	populateBoard() {

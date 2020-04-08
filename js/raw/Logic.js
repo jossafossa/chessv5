@@ -1,6 +1,6 @@
 export class Logic {
 	constructor(logic) {
-		this.parsedRules = {captureMoves: [], moves: [], firstMoves: [], firstCapures: []};
+		this.parsedRules = {captureMoves: [], moves: [], firstMoves: [], firstCapures: [], transformLocations: []};
 		this.rules = logic.split(";");
 
 		for (var index in this.rules) {
@@ -47,8 +47,10 @@ export class Rule {
 		this.isMove = false;
 		this.isCapture = false;
 		this.isFirst = false;
+		this.isTransform = false;
 
 		this.move = [0, 0];
+		this.transformLocation = [0,0,0];
 		this.infinite = [false, false];
 		this.infinitePower = [8, 8];
 
@@ -72,14 +74,28 @@ export class Rule {
 	  	if (char == "-") {
 	  		this.negative = true;
 	  	}
+	  	if (char == "t") {	  		
+	  		this.isTransform = true;
+	  	}
 	  	if (isNaN(parseInt(char)) == false) {
 	  		if (this.infinite[this.coordIndex]) {
 	  			this.infinitePower[this.coordIndex] = parseInt(char);
 	  		} else {
+	  			if (this.isTransform) {
+		  			if (this.coordIndex < 3) {
+							this.transformLocation[this.coordIndex] *= Math.pow(10, this.nrIndex);
+							this.transformLocation[this.coordIndex] += parseInt(char) * (this.negative ? -1 : 1);		
+		  			}	
+						this.nrIndex++;
+		  		} else {
+
 					this.move[this.coordIndex] *= Math.pow(10, this.nrIndex);
 					this.move[this.coordIndex] += parseInt(char) * (this.negative ? -1 : 1);				
 					this.nrIndex++;
-	  		}
+	
+		  		}	  	
+		  	}
+	  		
 	  		
 	  	}
 	  	if (char == "i") {
@@ -102,7 +118,7 @@ export class Rule {
 			moves: this.isMove && !this.isFirst ? moves : [],
 			firstMoves: this.isFirst && this.isMove ? moves : [],
 			firstCapures: this.isFirst && this.isCapture ? moves : [],
-
+			transformLocations: this.isTransform ? moves : [],
 		};
 		return all;
 	}

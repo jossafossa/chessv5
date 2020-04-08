@@ -1,11 +1,35 @@
 body {
 	padding:0;
 	margin:0;
+}
+
+.board-container {
 	display:flex;
-	width:100vw;
-	height:100vh;
 	align-items: center;
 	justify-content: center;
+	width:100vw;
+	height:100vh;
+
+}
+
+.scoreboard {
+	position: absolute;
+	left:0;
+	right:0;
+	width:100%;
+	max-width:500px;
+	background-color:rgba(0,0,0,0.8);
+	color:white;
+	font-family:"Quicksand";
+	text-align: center;
+	margin:auto;
+	padding:2rem;
+	border-radius:0 0 1rem 1rem;
+}
+
+.scoreboard > * {
+	margin:0;
+	padding:0;
 }
 
 * {
